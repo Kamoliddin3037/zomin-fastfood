@@ -2,21 +2,15 @@ services:
   - type: web
     name: zomin-fastfood
     runtime: node
-    plan: starter
-    buildCommand: npm ci
+    plan: free
+    buildCommand: npm install --omit=dev
     startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
       - key: JWT_SECRET
         generateValue: true
       - key: DB_DIR
-        value: /var/data
+        value: ./data
       - key: DB_PATH
-        value: /var/data/fastfood.sqlite
-    disk:
-      name: fastfood-data
-      mountPath: /var/data
-      sizeGB: 1
+        value: ./data/fastfood.sqlite
