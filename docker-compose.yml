@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  fastfood-app:
+    build: .
+    container_name: zomin-fastfood-hub
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - JWT_SECRET=zomin_fastfood_super_secret_jwt_key_2026_production
+      - DB_DIR=/app/data
+      - DB_PATH=/app/data/fastfood.sqlite
+      - ADMIN_DEFAULT_PASSWORD=admin123
+      # - BOT_TOKEN=your_telegram_bot_token_here
+      # - ADMIN_CHAT_ID=your_chat_id_here
+      # - WEB_APP_URL=https://your-domain.uz
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

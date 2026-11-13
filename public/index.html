@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light" data-color-scheme="green">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Zomin FastFood Hub | Telegram Mini App & Veb Sayt</title>
+  <meta name="description" content="Zomin tumanining eng mazali fast-food taomlari: Tandir lavash, suvli burgerlar va pitsalarni etkazib berish bilan buyurtma qiling!">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <link rel="stylesheet" href="css/style.css?v=2.5">
+  <link rel="stylesheet" href="css/depth.css?v=2.5"></head>
+<body>
+
+  <!-- Background Blur Glows -->
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-burger"></i>
+        </div>
+        <div class="brand-info">
+          <h1>Zomin FastFood</h1>
+          <span class="status-badge" id="restaurantStatus">
+            <span class="status-dot"></span> Open • Zomin Markaz
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Theme & Color Selector Trigger -->
+        <button class="icon-btn theme-toggle-btn" id="openThemeBtn" title="Mavzu va Rangni sozlash">
+          <i class="fa-solid fa-palette"></i>
+        </button>
+        <button class="icon-btn" id="openSearchBtn" title="Qidirish">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <a href="/admin.html" class="admin-link-btn" title="Admin Panel">
+          <i class="fa-solid fa-user-shield"></i> <span>Admin</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Search Input (Hidden by default) -->
+    <div class="search-bar-wrapper hidden" id="searchBarWrapper">
+      <div class="search-input-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Lavash, burger yoki pitsa qidirish...">
+        <button class="close-search-btn" id="closeSearchBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <span class="hero-tag">🌲 Zominning N1 Fast-Foodi</span>
+      <h2>Eng Mazali Tandir Lavash va Suvli Burgerlar!</h2>
+      <p>Iliq, mazali va tezkor etkazib berish. Eshigingiz tagigacha!</p>
+    </div>
+  </section>
+
+  <!-- Categories Horizontal Slider -->
+  <section class="categories-section">
+    <div class="categories-scroll" id="categoriesContainer">
+      <!-- Dynamic categories populated via JS -->
+    </div>
+  </section>
+
+  <!-- Main Food Catalog -->
+  <main class="catalog-section">
+    <div class="section-header">
+      <h3 id="currentCategoryTitle">Barcha Taomlar</h3>
+      <span class="items-count" id="itemsCount">0 taom</span>
+    </div>
+
+    <div class="food-grid" id="foodGrid">
+      <!-- Dynamic 3D food cards populated via JS -->
+    </div>
+  </main>
+
+  <!-- Floating Cart Button (Desktop / Tablet view) -->
+  <div class="floating-cart-bar hidden" id="floatingCartBar">
+    <div class="cart-bar-info">
+      <div class="cart-badge-count" id="cartBadgeCount">0</div>
+      <div class="cart-bar-text">
+        <span class="cart-bar-label">Savatda:</span>
+        <span class="cart-bar-total" id="cartBarTotal">0 UZS</span>
+      </div>
+    </div>
+    <button class="checkout-open-btn" id="openCartBtn">
+      Savatga o'tish <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+
+  <!-- Live Active Order Floating Banner -->
+  <div class="active-tracker-banner hidden" id="activeTrackerBanner">
+    <div class="tracker-banner-content">
+      <div class="tracker-banner-icon"><i class="fa-solid fa-motorcycle fa-bounce"></i></div>
+      <div class="tracker-banner-text">
+        <span class="banner-title" id="bannerOrderId">Buyurtma #ORD-1004</span>
+        <span class="banner-status" id="bannerStatusText">⏳ Qabul qilindi</span>
+      </div>
+    </div>
+    <button class="tracker-banner-btn" id="openBannerTrackerBtn">
+      Kuzatish <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar (Telegram Mini App Style) -->
+  <nav class="mobile-bottom-nav">
+    <button class="nav-item active" id="navHomeBtn">
+      <i class="fa-solid fa-house"></i>
+      <span>Bosh sahifa</span>
+    </button>
+    <button class="nav-item" id="navCategoriesBtn">
+      <div class="nav-icon-wrapper"><i class="fa-solid fa-utensils"></i></div>
+      <span>Menyu</span>
+    </button>
+    <button class="nav-item nav-cart-item" id="navCartBtn">
+      <div class="nav-icon-wrapper">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="nav-cart-badge hidden" id="navCartBadge">0</span>
+      </div>
+      <span>Savat</span>
+    </button>
+    <button class="nav-item" id="navTrackerBtn">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <span>Buyurtmalar</span>
+    </button>
+    <a href="/admin.html" class="nav-item">
+      <i class="fa-solid fa-user-shield"></i>
+      <span>Admin</span>
+    </a>
+  </nav>
+
+  <!-- Theme & Color Picker Modal Drawer -->
+  <div class="modal-overlay hidden" id="themeModalOverlay">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <h3><i class="fa-solid fa-palette"></i> Dizayn & Ranglar Sozlamasi</h3>
+        <button class="drawer-close-btn" id="closeThemeBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="drawer-body theme-picker-box">
+        <div class="theme-picker-title">1. Fon Rejimini Tanlang</div>
+        <div class="mode-toggle-grid">
+          <button class="mode-btn active" id="btnModeLight" data-mode="light">
+            <i class="fa-solid fa-sun"></i> ☀️ Oq Fon (Light)
+          </button>
+          <button class="mode-btn" id="btnModeDark" data-mode="dark">
+            <i class="fa-solid fa-moon"></i> 🌙 Qora Fon (Dark)
+          </button>
+        </div>
+
+        <div class="theme-picker-title">2. Urfdagi Asosiy Rang (5 xil variant)</div>
+        <div class="color-swatches-grid">
+          <button class="swatch-btn swatch-green active" data-color="green">
+            🌿 Yashil
+          </button>
+          <button class="swatch-btn swatch-orange" data-color="orange">
+            🍊 Apelsin
+          </button>
+          <button class="swatch-btn swatch-red" data-color="red">
+            🍎 Qizil
+          </button>
+          <button class="swatch-btn swatch-purple" data-color="purple">
+            💜 Binafsha
+          </button>
+          <button class="swatch-btn swatch-gold" data-color="gold">
+            🟡 Oltin
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart & Checkout Modal Drawer -->
+  <div class="modal-overlay hidden" id="cartModalOverlay">
+    <div class="drawer-content cart-drawer-luxury">
+      <div class="drawer-header">
+        <div class="cart-header-title">
+          <div class="cart-header-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+          <div>
+            <h3>Sizning Savatingiz</h3>
+            <span class="cart-header-sub" id="cartHeaderSubtitle">Taomlar ro'yxati va buyurtma rasmiylashtirish</span>
+          </div>
+        </div>
+        <button class="drawer-close-btn" id="closeCartBtn" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="drawer-body" id="cartDrawerBody">
+        <!-- Cart Items List Section -->
+        <div class="cart-section-title" id="cartItemsHeader">
+          <span><i class="fa-solid fa-utensils"></i> Tanlangan taomlar</span>
+          <button type="button" class="clear-cart-link" id="clearCartBtn" title="Savatni tozalash">
+            <i class="fa-solid fa-trash-can"></i> Tozalash
+          </button>
+        </div>
+
+        <div class="cart-items-list" id="cartItemsList">
+          <!-- Dynamic Cart Items -->
+        </div>
+
+        <div class="empty-cart-view hidden" id="emptyCartView">
+          <div class="empty-icon"><i class="fa-solid fa-burger"></i></div>
+          <h4>Savatingiz hozircha bo'sh</h4>
+          <p>Menyudan o'zingizga yoqqan mazali taomlarni tanlang!</p>
+          <button type="button" class="btn-return-menu" id="returnMenuBtn">
+            <i class="fa-solid fa-arrow-left"></i> Menyuni ko'rish
+          </button>
+        </div>
+
+        <!-- Checkout Form Section -->
+        <div class="checkout-section hidden" id="checkoutSection">
+          <div class="checkout-section-badge">
+            <i class="fa-solid fa-truck-fast"></i> Yetkazib berish usuli
+          </div>
+
+          <div class="delivery-tabs">
+            <button class="tab-btn active" id="tabDelivery" data-type="delivery" type="button">
+              <span class="tab-icon"><i class="fa-solid fa-motorcycle"></i></span>
+              <div class="tab-text">
+                <strong>Etkazib berish</strong>
+                <small>Zomin bo'ylab tezkor</small>
+              </div>
+            </button>
+            <button class="tab-btn" id="tabTakeaway" data-type="takeaway" type="button">
+              <span class="tab-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+              <div class="tab-text">
+                <strong>Olib ketish</strong>
+                <small>Restorandan o'zim olaman</small>
+              </div>
+            </button>
+          </div>
+
+          <div class="checkout-section-badge">
+            <i class="fa-solid fa-clipboard-check"></i> Qabul qiluvchi ma'lumotlari
+          </div>
+
+          <form id="checkoutForm" onsubmit="event.preventDefault();">
+            <div class="form-group">
+              <label for="custName"><i class="fa-solid fa-user"></i> Ismingiz</label>
+              <div class="input-with-icon">
+                <i class="input-prefix-icon fa-solid fa-user-tag"></i>
+                <input type="text" id="custName" placeholder="Zomin Xaridori (Telegram profildan olindi)">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="custPhone"><i class="fa-solid fa-phone"></i> Telefon Raqamingiz</label>
+              <div class="input-with-icon">
+                <i class="input-prefix-icon fa-solid fa-phone-volume"></i>
+                <input type="tel" id="custPhone" placeholder="+998 90 123 45 67">
+              </div>
+            </div>
+
+            <div class="form-group" id="addressFormGroup">
+              <label for="custAddress"><i class="fa-solid fa-location-dot"></i> Etkazish manzili (Zomin)</label>
+              <div class="address-input-wrapper">
+                <i class="input-prefix-icon fa-solid fa-map-location-dot"></i>
+                <input type="text" id="custAddress" placeholder="Zomin markazi, Beruniy ko'chasi 5-uy">
+                <button type="button" class="btn-location" id="getLocationBtn" title="Joylashuvni aniqlash">
+                  <i class="fa-solid fa-crosshairs"></i> <span>GPS</span>
+                </button>
+              </div>
+              <small class="location-status-text" id="locationStatusText"></small>
+            </div>
+
+            <div class="form-group">
+              <label><i class="fa-solid fa-wallet"></i> To'lov Usulini Tanlang</label>
+              <div class="payment-options">
+                <label class="pay-option pay-option-cash active">
+                  <input type="radio" name="paymentMethod" value="cash" checked>
+                  <div class="pay-box-inner">
+                    <span class="pay-badge-icon">💵</span>
+                    <div class="pay-meta">
+                      <strong>Naqd pul</strong>
+                      <small>Kuryerga to'lash</small>
+                    </div>
+                    <span class="pay-check-indicator"><i class="fa-solid fa-circle-check"></i></span>
+                  </div>
+                </label>
+
+                <label class="pay-option pay-option-click">
+                  <input type="radio" name="paymentMethod" value="click">
+                  <div class="pay-box-inner">
+                    <span class="pay-badge-icon click-theme"><i class="fa-solid fa-bolt"></i></span>
+                    <div class="pay-meta">
+                      <strong>Click</strong>
+                      <small>Ilova / Karta</small>
+                    </div>
+                    <span class="pay-check-indicator"><i class="fa-solid fa-circle-check"></i></span>
+                  </div>
+                </label>
+
+                <label class="pay-option pay-option-payme">
+                  <input type="radio" name="paymentMethod" value="payme">
+                  <div class="pay-box-inner">
+                    <span class="pay-badge-icon payme-theme"><i class="fa-solid fa-wallet"></i></span>
+                    <div class="pay-meta">
+                      <strong>Payme</strong>
+                      <small>Ilova / Karta</small>
+                    </div>
+                    <span class="pay-check-indicator"><i class="fa-solid fa-circle-check"></i></span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="custNote"><i class="fa-solid fa-comment-dots"></i> Qo'shimcha izoh (ixtiyoriy)</label>
+              <textarea id="custNote" rows="2" placeholder="Masalan: Achchiq bo'lmasin, kirish kodi: 123, dom pod'yezdi oldida kutaman..."></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="drawer-footer hidden" id="drawerFooter">
+        <div class="receipt-card">
+          <div class="receipt-row">
+            <span class="receipt-label"><i class="fa-solid fa-burger"></i> Taomlar summasi:</span>
+            <span class="receipt-val" id="summaryItemsTotal">0 UZS</span>
+          </div>
+          <div class="receipt-row" id="deliveryFeeRow">
+            <span class="receipt-label"><i class="fa-solid fa-motorcycle"></i> Etkazib berish xizmati:</span>
+            <span class="receipt-val highlight" id="summaryDeliveryFee">10 000 UZS</span>
+          </div>
+          <div class="receipt-divider"></div>
+          <div class="receipt-row total-receipt-row">
+            <div class="total-text-group">
+              <span class="total-label">Umumiy To'lov:</span>
+              <small class="total-sub">Barcha xizmatlar ichida</small>
+            </div>
+            <span class="grand-total-val" id="summaryGrandTotal">0 UZS</span>
+          </div>
+        </div>
+
+        <button class="confirm-order-btn" id="submitOrderBtn" type="button">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>Buyurtmani Tasdiqlash</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Click & Payme Online Payment Modal -->
+  <div class="modal-overlay hidden" id="onlinePaymentModalOverlay">
+    <div class="online-payment-modal-content">
+      <div class="payment-provider-header">
+        <span class="provider-logo-badge" id="payModalBadge">🔵 CLICK</span>
+        <h3 id="payModalTitle">Online To'lov</h3>
+      </div>
+
+      <p class="order-number-text">Buyurtma: <strong id="payModalOrderId">#ORD-1002</strong></p>
+      <div class="payment-amount-display" id="payModalAmount">46 000 UZS</div>
+
+      <!-- Card Transfer Option Box -->
+      <div class="card-transfer-box">
+        <span class="card-box-label">Zomin FastFood Plastik Karta Raqami:</span>
+        <div class="card-number-row">
+          <span class="card-number-text" id="payModalCardNumber">8600 4910 2841 9012</span>
+          <button type="button" class="copy-card-btn" id="copyCardBtn"><i class="fa-solid fa-copy"></i> Nusxalash</button>
+        </div>
+        <small style="color: var(--text-muted); font-size: 11px;">Karta egasi: <strong id="payModalCardHolder">ZOMIN FASTFOOD HUB (SARDOR R.)</strong></small>
+      </div>
+
+      <!-- Direct App Button Link -->
+      <a href="#" target="_blank" class="direct-pay-app-btn click-btn" id="directPayAppBtn">
+        <i class="fa-solid fa-mobile-screen-button"></i> <span id="payAppBtnText">Click Ilovasi Orqali To'lash</span>
+      </a>
+
+      <!-- Confirmation Trigger -->
+      <button class="verify-payment-btn" id="confirmPaymentDoneBtn">
+        <i class="fa-solid fa-circle-check"></i> To'lov Qildim (Tasdiqlash)
+      </button>
+    </div>
+  </div>
+
+  <!-- Order Status & Live Process Tracker Modal -->
+  <div class="modal-overlay hidden" id="statusModalOverlay">
+    <div class="status-modal-content">
+      <div class="tracker-modal-header">
+        <div class="tracker-live-pill">
+          <span class="pulse-dot"></span> Jonli Kuzatuv
+        </div>
+        <button class="drawer-close-btn" id="closeStatusModalBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="status-icon-glow" id="statusIconGlow">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <h2 id="trackerMainTitle">Buyurtmangiz Qabul Qilindi!</h2>
+      <p class="order-number-text">Buyurtma raqami: <strong id="successOrderId">#ORD-1004</strong></p>
+
+      <!-- Search by Order ID box (if user enters manually) -->
+      <div class="tracker-search-bar hidden" id="trackerSearchBarBox">
+        <input type="text" id="manualOrderIdInput" placeholder="Masalan: ORD-1004">
+        <button type="button" class="btn-location" id="findOrderBtn">Kuzatish</button>
+      </div>
+
+      <div class="tracker-badge-box" id="trackerBadgeBox">
+        <span class="tracker-badge" id="trackerBadgeText">⏳ Qabul qilindi</span>
+        <p class="tracker-desc" id="trackerDescText">Operatorimiz buyurtmangizni qabul qildi va navbatga qo'ydi.</p>
+      </div>
+
+      <!-- Real-Time Progress Stepper -->
+      <div class="order-progress-tracker" id="orderProgressTracker">
+        <div class="tracker-line-bg">
+          <div class="tracker-line-progress" id="trackerLineProgress" style="width: 12%;"></div>
+        </div>
+
+        <div class="step step-done" id="stepPending">
+          <div class="step-icon"><i class="fa-solid fa-receipt"></i></div>
+          <span>Qabul qilindi</span>
+        </div>
+        <div class="step" id="stepPreparing">
+          <div class="step-icon"><i class="fa-solid fa-utensils"></i></div>
+          <span>Tayyorlanmoqda</span>
+        </div>
+        <div class="step" id="stepDelivering">
+          <div class="step-icon"><i class="fa-solid fa-motorcycle"></i></div>
+          <span>Yo'lda</span>
+        </div>
+        <div class="step" id="stepCompleted">
+          <div class="step-icon"><i class="fa-solid fa-house-circle-check"></i></div>
+          <span>Etkazildi</span>
+        </div>
+      </div>
+
+      <!-- Order Details Summary -->
+      <div class="tracker-order-details" id="trackerOrderDetails">
+        <div class="tracker-details-row">
+          <span>Yetkazish manzili:</span>
+          <strong id="trackerAddress">-</strong>
+        </div>
+        <div class="tracker-details-row">
+          <span>Umumiy to'lov:</span>
+          <strong id="trackerTotalAmount" style="color: var(--primary);">-</strong>
+        </div>
+        <div class="tracker-items-summary" id="trackerItemsSummary"></div>
+      </div>
+
+      <div class="status-info-box">
+        <p><i class="fa-solid fa-headset"></i> Operatorimiz tez orada siz bilan bog'lanadi!</p>
+        <a href="tel:+998901234567" class="tracker-call-btn" id="trackerCallBtn">
+          <i class="fa-solid fa-phone"></i> +998 90 123 45 67
+        </a>
+        <small class="live-polling-note"><i class="fa-solid fa-arrows-rotate fa-spin"></i> Real-vaqt rejimida avto-yangilanmoqda</small>
+      </div>
+
+      <button class="close-status-btn" id="closeStatusBtn">Yopish / Bosh sahifa</button>
+    </div>
+  </div>
+
+  <script src="js/app.js?v=2.5"></script>
+</body>
+</html>

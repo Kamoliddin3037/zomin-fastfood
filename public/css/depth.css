@@ -1,0 +1,38 @@
+/* Shared depth treatment for every customer and staff screen. */
+:root { --depth-edge: var(--card-border, var(--admin-border)); --depth-shadow: 0 6px 0 var(--depth-edge), 0 16px 32px rgba(0,0,0,.12); }
+.food-card,.metric-card,.order-card,.report-card,.settings-card,.table-container,.panel,.service-order,.admin-theme-dialog,.admin-modal-content,.drawer-content,.toast-box { box-shadow:var(--depth-shadow),inset 0 1px 0 rgba(255,255,255,.14); border:1px solid var(--depth-edge); }
+.food-card,.metric-card,.order-card,.service-order { transition:transform .2s ease,box-shadow .2s ease; }
+@media(hover:hover){.food-card:hover,.metric-card:hover,.order-card:hover,.service-order:hover { transform:translateY(-4px); box-shadow:0 8px 0 var(--depth-edge),0 24px 38px rgba(0,0,0,.16); }}
+.add-btn,.btn-primary,.submit-order-btn,.checkout-open-btn,.action-btn,.mode-btn,.swatch-btn,.category-pill,.filter-pill,.period-pill,.refresh-btn,.icon-btn,.qty-btn,.drawer-close-btn,.admin-theme-grid button,.audio-toggle-btn,.back-site-btn,.direct-pay-app-btn { box-shadow:0 4px 0 var(--depth-edge),0 8px 16px rgba(0,0,0,.08); transition:transform .15s,box-shadow .15s; }
+button:active:not(:disabled) { transform:translateY(2px); }
+.admin-sidebar,.main-header,.mobile-bottom-nav,.service-sidebar { box-shadow:0 8px 28px rgba(0,0,0,.1); }
+input:not([type=checkbox]):not([type=radio]),textarea,select { box-shadow:inset 0 2px 5px rgba(0,0,0,.08); }
+.order-photo,.order-photo-placeholder { width:60px;height:60px;object-fit:cover;border-radius:12px;flex-shrink:0;background:var(--bg-secondary,var(--admin-sidebar));box-shadow:0 3px 0 var(--depth-edge),0 6px 12px rgba(0,0,0,.12); }
+.order-photo-placeholder { display:inline-grid;place-items:center;font-size:26px; }
+.order-item-photo { display:flex;align-items:center;gap:12px;list-style:none;padding:10px 0; }
+.order-item-photo>span:not(.order-photo-placeholder) { flex:1;min-width:0; }
+.order-items-box ul { padding:0; }
+.order-items-box .order-item-photo { align-items:center; }
+#menu .order-photo { display:block;width:100%;height:120px;margin-bottom:14px; }
+#menu .order-photo-placeholder { display:grid;width:100%;height:120px;margin-bottom:14px;background:var(--primary-glow); }
+.cart-row .order-photo { width:44px;height:44px; }
+.cart-row>span { flex:1; }
+.service-order.ready { border-color:var(--primary);box-shadow:0 5px 0 var(--primary),0 16px 30px var(--primary-glow); }
+@media(prefers-reduced-motion:reduce){.food-card,.metric-card,.order-card,.service-order,button{transition:none!important;transform:none!important}}
+
+.report-box,.analytics-card { box-shadow:var(--depth-shadow),inset 0 1px 0 rgba(255,255,255,.14); }
+/* Shared collapsible sidebar */
+.mobile-toggle-sidebar,.sidebar-open-control{display:inline-flex!important;align-items:center;justify-content:center;width:42px;height:42px;flex-shrink:0;border-radius:12px;background:var(--bg-secondary,var(--admin-card));color:var(--text-main);border:1px solid var(--depth-edge);cursor:pointer;font-size:20px}
+.close-sidebar-btn{display:block!important}
+.sidebar-close-control{position:absolute;right:10px;top:8px;padding:5px 9px;font-size:14px}
+.admin-sidebar,.service-sidebar{transition:transform .25s ease}
+.admin-main,.service-main{transition:margin-left .25s ease}
+.sidebar-collapsed .admin-sidebar,.sidebar-collapsed .service-sidebar{transform:translateX(-100%)}
+.sidebar-collapsed .admin-main,.sidebar-collapsed .service-main{margin-left:0}
+.sidebar-backdrop{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.5);border:0;border-radius:0}
+.sidebar-backdrop[hidden]{display:none}
+@media(max-width:992px){.service-sidebar{position:fixed;inset:0 auto 0 0;width:250px;height:100dvh;z-index:1000;transform:translateX(-100%);padding:28px 20px}.service-sidebar.open{transform:translateX(0)}.service-sidebar nav{display:grid;overflow:visible}.service-sidebar .service-home{display:block}.service-main{margin-left:0!important}.service-sidebar .service-brand{margin-top:12px}.service-main header>div{flex:1}}
+/* One quiet panel control, matching the surrounding workspace. */
+.mobile-toggle-sidebar,.sidebar-open-control{background:transparent!important;border:0!important;box-shadow:none!important;color:var(--text-muted);width:36px;height:36px;border-radius:8px;font-size:18px}
+.mobile-toggle-sidebar:hover,.sidebar-open-control:hover{background:var(--primary-glow)!important;color:var(--text-main)}
+.mobile-toggle-sidebar[aria-expanded="false"] svg path:first-of-type,.sidebar-open-control[aria-expanded="false"] svg path:first-of-type{stroke:var(--primary)}

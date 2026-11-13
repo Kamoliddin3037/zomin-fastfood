@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark" data-color-scheme="green">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Tizimga Kirish | Zomin FastFood Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/depth.css">
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 20%, #15202B 0%, #0B0F17 100%);
+      padding: 20px;
+      font-family: 'Outfit', sans-serif;
+      color: #fff;
+    }
+
+    .login-container {
+      width: min(100%, 450px);
+      background: rgba(18, 26, 38, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: clamp(24px, 5vw, 36px) clamp(18px, 4vw, 30px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: 150px;
+      height: 150px;
+      background: var(--primary, #10b981);
+      filter: blur(80px);
+      opacity: 0.25;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-logo-box {
+      width: 68px;
+      height: 68px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
+      border: 1px solid var(--primary, #10b981);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: var(--primary, #10b981);
+      margin: 0 auto 16px;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+    }
+
+    .login-header h2 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .login-header p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 14px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 14px;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 14px 12px 40px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+
+    .input-wrapper input:focus {
+      border-color: var(--primary, #10b981);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary, #10b981), #059669);
+      border: none;
+      color: #fff;
+      padding: 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+      transition: all 0.25s ease;
+      margin-top: 24px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .demo-roles-section {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .demo-roles-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    @media (max-width: 360px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 8px 10px;
+      color: #e2e8f0;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .demo-btn span {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 400;
+    }
+
+    .demo-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary, #10b981);
+      transform: translateY(-1px);
+    }
+
+    .back-home-link {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s ease;
+    }
+
+    .back-home-link:hover {
+      color: #fff;
+    }
+
+    .error-alert {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-bottom: 16px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo-box">
+        <i class="fa-solid fa-burger"></i>
+      </div>
+      <h2>Zomin FastFood</h2>
+      <p>Xodimlar va Boshqaruv Tizimi (RBAC)</p>
+    </div>
+
+    <div class="error-alert" id="errorAlert">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span id="errorMessage">Xatolik</span>
+    </div>
+
+    <form id="loginForm" autocomplete="off">
+      <div class="form-group">
+        <label for="usernameInput">Foydalanuvchi nomi (Login)</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="usernameInput" required placeholder="admin, oshpaz, kuryer, kassir">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="passwordInput">Maxfiy Parol</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="passwordInput" required placeholder="••••••••">
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="loginBtn">
+        <span>Tizimga Kirish</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <!-- Quick Demo Roles Selector -->
+    <div class="demo-roles-section">
+      <div class="demo-roles-title">⚡ 1-Bosishda Rol Tanlash (Demo)</div>
+      <div class="demo-grid">
+        <button class="demo-btn" data-user="admin" data-pass="admin123" data-role="admin">
+          <strong>🛡 Administrator</strong>
+          <span>admin / admin123</span>
+        </button>
+        <button class="demo-btn" data-user="oshpaz" data-pass="oshpaz123" data-role="cook">
+          <strong>👨‍🍳 Oshpaz (KDS)</strong>
+          <span>oshpaz / oshpaz123</span>
+        </button>
+        <button class="demo-btn" data-user="kuryer" data-pass="kuryer123" data-role="courier">
+          <strong>🛵 Kuryer</strong>
+          <span>kuryer / kuryer123</span>
+        </button>
+        <button class="demo-btn" data-user="kassir" data-pass="kassir123" data-role="cashier">
+          <strong>👔 Kassir / Zal</strong>
+          <span>kassir / kassir123</span>
+        </button>
+      </div>
+    </div>
+
+    <a href="/" class="back-home-link">
+      <i class="fa-solid fa-chevron-left"></i> Mijozlar veb-saytiga qaytish
+    </a>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    const form = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('usernameInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorAlert = document.getElementById('errorAlert');
+    const errorMessage = document.getElementById('errorMessage');
+
+    function showError(msg) {
+      errorMessage.textContent = msg;
+      errorAlert.style.display = 'flex';
+    }
+
+    function hideError() {
+      errorAlert.style.display = 'none';
+    }
+
+    // Direct Quick Demo Fill & Auto Login
+    document.querySelectorAll('.demo-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        usernameInput.value = btn.dataset.user;
+        passwordInput.value = btn.dataset.pass;
+        hideError();
+        handleLogin();
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleLogin();
+    });
+
+    async function handleLogin() {
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!username || !password) {
+        showError('Iltimos, login va parolni kiriting');
+        return;
+      }
+
+      hideError();
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Tekshirilmoqda...';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.token && data.user) {
+          Auth.setAuth(data.token, data.user);
+
+          // Check url redirect query
+          const params = new URLSearchParams(window.location.search);
+          const redirectUrl = params.get('redirect');
+
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
+            return;
+          }
+
+          // Direct based on role
+          switch (data.user.role) {
+            case 'admin':
+              window.location.href = '/admin.html';
+              break;
+            case 'cook':
+              window.location.href = '/kitchen.html';
+              break;
+            case 'courier':
+              window.location.href = '/courier.html';
+              break;
+            case 'cashier':
+              window.location.href = '/waiter.html';
+              break;
+            default:
+              window.location.href = '/admin.html';
+          }
+        } else {
+          showError(data.error || 'Kirishda xatolik yuz berdi');
+        }
+      } catch (err) {
+        console.error('Login error:', err);
+        showError('Server bilan aloqa uzildi');
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span>Tizimga Kirish</span> <i class="fa-solid fa-arrow-right"></i>';
+      }
+    }
+  </script>
+</body>
+</html>

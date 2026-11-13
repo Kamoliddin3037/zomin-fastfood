@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Menyu & Taomlar Boshqaruvi | Zomin FastFood Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="/css/depth.css"></head>
+<body data-admin-page="products">
+
+  <!-- Admin Layout -->
+  <div class="admin-wrapper">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-brand">
+        <div class="logo-box"><i class="fa-solid fa-burger"></i></div>
+        <div>
+          <h2>Zomin Admin</h2>
+          <span class="live-indicator"><span class="pulse-dot"></span> Real-Time Live</span>
+        </div>
+        
+      </div>
+
+      <nav class="sidebar-menu">
+        <a class="menu-item" href="/waiter.html">🍽 Ofitsiant — zakaz olish</a>
+        <a class="menu-item" href="/kitchen.html">👨‍🍳 Oshxona monitori</a>
+        <a class="menu-item" href="/courier.html">🛵 Kuryer portali</a>
+        <a class="menu-item" href="/orders.html">
+          <i class="fa-solid fa-bell"></i> Live Buyurtmalar <span class="badge-count" id="pendingOrdersCount">0</span>
+        </a>
+        <button class="menu-item" data-tab="customers">
+          <i class="fa-solid fa-users"></i> Mijozlar Bazasi (CRM)
+        </button>
+        <a class="menu-item" href="/admin.html">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Statistika & Hisobot
+        </a>
+        <a class="menu-item active" href="/products.html">
+          <i class="fa-solid fa-utensils"></i> Menyu & Taomlar
+        </a>
+        <a class="menu-item" href="/admin.html">
+          <i class="fa-solid fa-user-shield"></i> Xodimlar & Rollar
+        </a>
+        <button class="menu-item" data-tab="settings">
+          <i class="fa-solid fa-gears"></i> Restoran Sozlamalari
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="audio-toggle-btn" id="toggleSoundBtn" title="Ovozli bildirishnomani yoqish/o'chirish">
+          <i class="fa-solid fa-volume-high"></i> Ovozli Xabar: Yoqilgan
+        </button>
+        <a href="/" class="back-site-btn"><i class="fa-solid fa-arrow-left"></i> Veb-saytga qaytish</a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-main">
+
+      <!-- Top Header -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle-sidebar" id="mobileToggleSidebarBtn" aria-label="Menyuni ochish yoki yopish" aria-controls="adminSidebar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/><path d="M5.5 8h1M5.5 11h1"/></svg></button>
+          <div class="page-title">
+            <h2 id="currentTabTitle">Menyu & Taomlar Boshqaruvi</h2>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div id="userProfileWidget"></div>
+          <button class="refresh-btn" id="adminThemeBtn" type="button" title="Dizayn va ranglar" aria-label="Dizayn va ranglar" aria-haspopup="dialog">🎨</button>
+          <span class="live-status-pill"><i class="fa-solid fa-signal"></i> 4s Avto-Yangilanish</span>
+          <button class="refresh-btn" id="refreshBtn" title="Qo'lda yangilash">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard KPI Metrics Cards -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon revenue"><i class="fa-solid fa-money-bill-wave"></i></div>
+          <div class="metric-info">
+            <span class="metric-label">Jami Tushum</span>
+            <h3 id="statRevenue">0 UZS</h3>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon pending"><i class="fa-solid fa-clock"></i></div>
+          <div class="metric-info">
+            <span class="metric-label">Kutilayotgan Buyurtmalar</span>
+            <h3 id="statPending">0</h3>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon total"><i class="fa-solid fa-receipt"></i></div>
+          <div class="metric-info">
+            <span class="metric-label">Barcha Buyurtmalar</span>
+            <h3 id="statTotalOrders">0</h3>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon products"><i class="fa-solid fa-box"></i></div>
+          <div class="metric-info">
+            <span class="metric-label">Faol Taomlar</span>
+            <h3 id="statActiveProducts">0</h3>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 1: LIVE ORDERS MANAGEMENT -->
+      <section class="tab-content hidden" id="tabOrders">
+        <div class="filter-bar">
+          <div class="status-filters">
+            <button class="filter-pill active" data-filter="all">Barchasi</button>
+            <button class="filter-pill" data-filter="pending">⏳ Kutilmoqda</button>
+            <button class="filter-pill" data-filter="ready">🔔 Tayyor</button>
+          <button class="filter-pill" data-filter="preparing">👨‍🍳 Tayyorlanmoqda</button>
+            <button class="filter-pill" data-filter="delivering">🚚 Yo'lda</button>
+            <button class="filter-pill" data-filter="completed">✅ Etkazildi</button>
+          </div>
+        </div>
+
+        <div class="orders-grid" id="ordersGrid">
+          <!-- Dynamic Live Order Cards -->
+        </div>
+      </section>
+
+      <!-- TAB 2: CRM REGISTERED CUSTOMERS DATABASE -->
+      <section class="tab-content hidden" id="tabCustomers">
+        <div class="actions-header">
+          <h3>👥 Mijozlar Bazasi & Ro'yxatdan O'tganlar (CRM)</h3>
+          <div class="search-box-crm">
+            <input type="text" id="crmSearchInput" placeholder="Mijoz ismi yoki tel bo'yicha qidirish...">
+          </div>
+        </div>
+
+        <div class="admin-products-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Mijoz Ismi</th>
+                <th>Telefon Raqami</th>
+                <th>Buyurtmalar Soni</th>
+                <th>Jami Xarid Summasi</th>
+                <th>So'nggi Manzil</th>
+                <th>So'nggi Faollik</th>
+                <th>Amallar</th>
+              </tr>
+            </thead>
+            <tbody id="customersTableBody">
+              <!-- Dynamic CRM Customer Rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 3: FINANCIAL REPORTS & EXCEL EXPORT -->
+      <section class="tab-content hidden" id="tabReports">
+        <div class="reports-header-bar">
+          <div class="period-selector-pills">
+            <button class="period-pill active" data-period="all">Barcha Davr</button>
+            <button class="period-pill" data-period="today">Bugun</button>
+            <button class="period-pill" data-period="week">Shu Hafta</button>
+            <button class="period-pill" data-period="month">Shu Oy</button>
+          </div>
+          <a href="/api/reports/export" target="_blank" class="excel-export-btn">
+            <i class="fa-solid fa-file-excel"></i> 📊 Excel / CSV Hisobotni Yuklab Olish
+          </a>
+        </div>
+
+        <div class="reports-summary-grid">
+          <div class="report-box">
+            <span class="report-box-title">Davr Tushumi</span>
+            <h2 id="reportRevenueTotal">0 UZS</h2>
+          </div>
+          <div class="report-box">
+            <span class="report-box-title">O'rtacha Chek Summasi</span>
+            <h2 id="reportAvgOrderValue">0 UZS</h2>
+          </div>
+          <div class="report-box">
+            <span class="report-box-title">Buyurtmalar Soni</span>
+            <h2 id="reportTotalOrdersCount">0 ta</h2>
+          </div>
+        </div>
+
+        <div class="analytics-grid" style="margin-top: 20px;">
+          <div class="analytics-card">
+            <h3><i class="fa-solid fa-fire"></i> Eng Xaridorgir 5 Taom (Leaderboard)</h3>
+            <div class="top-products-list" id="topProductsList">
+              <!-- Dynamic Top Products -->
+            </div>
+          </div>
+
+          <div class="analytics-card">
+            <h3><i class="fa-solid fa-credit-card"></i> To'lov Usullari Hissasi</h3>
+            <div class="payment-stats-list">
+              <div class="pay-stat-item">
+                <span>💵 Naqd pul:</span>
+                <strong id="reportCashCount">0 ta</strong>
+              </div>
+              <div class="pay-stat-item">
+                <span>🔵 Click Online:</span>
+                <strong id="reportClickCount">0 ta</strong>
+              </div>
+              <div class="pay-stat-item">
+                <span>🟢 Payme Online:</span>
+                <strong id="reportPaymeCount">0 ta</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: PRODUCTS MANAGEMENT -->
+      <section class="tab-content" id="tabProducts">
+        <div class="actions-header">
+          <h3>Fast-Food Taomlar Ro'yxati</h3>
+          <button class="btn-primary" id="openAddProductModalBtn">
+            <i class="fa-solid fa-plus"></i> Yangi Taom Qo'shish
+          </button>
+        </div>
+
+        <div class="admin-products-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Rasm</th>
+                <th>Nomi</th>
+                <th>Kategoriya</th>
+                <th>Narxi</th>
+                <th>Belgi (Badge)</th>
+                <th>Holati</th>
+                <th>Amallar</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <!-- Dynamic Products Table Rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 5: DEDICATED RESTAURANT SETTINGS & REKVIZITLAR -->
+      <section class="tab-content hidden" id="tabSettings">
+        <div class="settings-card">
+          <h3><i class="fa-solid fa-store"></i> Restoran Sozlamalari & To'lov Rekvizitlari</h3>
+          <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Ushbu rekvizitlar mijozlarga Click va Payme to'lovlarini amalga oshirishda ko'rsatiladi.</p>
+          <hr class="divider">
+
+          <form id="settingsForm" onsubmit="event.preventDefault();">
+            <div class="form-group">
+              <label><i class="fa-solid fa-door-open"></i> Restoran Ish Holati</label>
+              <select id="setIsOpen">
+                <option value="true">🟢 Ochiq (Buyurtmalarni qabul qiladi)</option>
+                <option value="false">🔴 Yopiq (Vaqtincha xizmat ko'rsatilmaydi)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label><i class="fa-solid fa-motorcycle"></i> Etkazib berish narxi (UZS)</label>
+              <input type="number" id="setDeliveryFee" placeholder="10000">
+            </div>
+
+            <div class="form-group">
+              <label><i class="fa-solid fa-credit-card"></i> Plastik Karta Raqami (Click/Payme o'tkazmalari uchun)</label>
+              <input type="text" id="setCardNumber" placeholder="8600 4910 2841 9012">
+            </div>
+
+            <div class="form-group">
+              <label><i class="fa-solid fa-id-card"></i> Karta Egasi Ismi (Plastik karta egasi)</label>
+              <input type="text" id="setCardHolder" placeholder="ZOMIN FASTFOOD HUB (SARDOR R.)">
+            </div>
+
+            <div class="form-group">
+              <label><i class="fa-solid fa-phone"></i> Restoran Telefon Raqami</label>
+              <input type="text" id="setPhone" placeholder="+998 90 123 45 67">
+            </div>
+
+            <button class="btn-primary" id="saveSettingsBtn" style="padding: 12px 24px; font-size: 14px;">
+              <i class="fa-solid fa-floppy-disk"></i> Sozlamalarni Saqlash
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Add Product Modal -->
+  <div class="modal-overlay hidden" id="productModalOverlay">
+    <div class="admin-modal-content">
+      <div class="modal-header">
+        <h3>Yangi Taom Qo'shish</h3>
+        <button class="drawer-close-btn" id="closeProductModalBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <form id="addProductForm" onsubmit="event.preventDefault();">
+        <div class="form-group">
+          <label>Taom Nomi</label>
+          <input type="text" id="prodName" placeholder="Masalan: Zomin Tandir Lavash" required>
+        </div>
+
+        <div class="form-group">
+          <label>Kategoriya</label>
+          <select id="prodCategory">
+            <option value="lavash">Lavash & Tandir</option>
+            <option value="burgers">Burgerlar</option>
+            <option value="pizza">Pitsa</option>
+            <option value="combos">Set & Kombolar</option>
+            <option value="drinks">Ichimliklar</option>
+            <option value="sauces">Souslar</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tavsifi</label>
+          <textarea id="prodDesc" rows="3" placeholder="Tarkibidagi masalliqlar..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Narxi (UZS)</label>
+          <input type="number" id="prodPrice" placeholder="35000" required>
+        </div>
+
+        <div class="form-group">
+          <label>Nishon (Badge)</label>
+          <input type="text" id="prodBadge" placeholder="Xit Sotuv, Pishloqli, Achiq...">
+        </div>
+
+        <div class="form-group">
+          <label>Asosiy Rasm URL Manzili</label>
+          <input type="url" id="prodImage" placeholder="https://images.unsplash.com/..." required>
+        </div>
+
+        <button class="btn-primary" id="saveProductBtn">Saqlash va Qo'shish</button>
+      </form>
+    </div>
+  </div>
+
+
+  <div class="admin-theme-overlay hidden" id="adminThemeOverlay">
+    <section class="admin-theme-dialog" role="dialog" aria-modal="true" aria-labelledby="adminThemeTitle">
+      <div class="modal-header"><h3 id="adminThemeTitle">🎨 Dizayn & Ranglar Sozlamasi</h3><button type="button" class="refresh-btn" id="closeAdminTheme" aria-label="Yopish">✕</button></div>
+      <h4>1. Fon Rejimini Tanlang</h4>
+      <div class="admin-theme-grid"><button type="button" data-mode="light">☀️ Oq Fon (Light)</button><button type="button" data-mode="dark">🌙 Qora Fon (Dark)</button></div>
+      <h4>2. Asosiy Rang (5 xil variant)</h4>
+      <div class="admin-theme-grid admin-colors">
+<button type="button" data-color="green" style="--swatch: #10B981">🌿 Yashil</button>
+<button type="button" data-color="orange" style="--swatch: #FF6B00">🍊 Apelsin</button>
+<button type="button" data-color="red" style="--swatch: #EF4444">🍎 Qizil</button>
+<button type="button" data-color="purple" style="--swatch: #8B5CF6">💜 Binafsha</button>
+<button type="button" data-color="gold" style="--swatch: #F59E0B">🟡 Oltin</button>
+</div></section></div>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+<script src="/js/sidebar.js"></script></body>
+</html>
